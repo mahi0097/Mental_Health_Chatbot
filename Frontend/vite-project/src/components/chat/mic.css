@@ -1,0 +1,11 @@
+.mic-btn {
+  padding: 0.5rem; /* same as p-2 */
+  border-radius: 9999px; /* same as rounded-full */
+  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
+
+.mic-btn:hover {
+  border-color: #7c3aed;   /* purple-500 */
+  background-color: #f3e8ff; /* purple-100 */
+}

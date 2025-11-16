@@ -1,0 +1,26 @@
+/* src/app.css or src/index.css */
+
+.logout-btn {
+  background-color: #ef4444; /* red-500 */
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #dc2626; /* red-600 */
+}
+
+.login-btn {
+  background-color: #7c3aed; /* purple-600 */
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+.login-btn:hover {
+  background-color: #6d28d9; /* purple-700 */
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;  /* removes both vertical & horizontal scroll */
+}
