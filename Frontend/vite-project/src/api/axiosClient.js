@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:5000/api', // or your backend URL
+  baseURL: 'https://mental-health-chatbot-rk3p.onrender.com', 
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
