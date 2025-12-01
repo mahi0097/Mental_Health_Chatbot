@@ -37,9 +37,14 @@ export default function Chat() {
           { sender: "bot", text: res.data.reply, timestamp },
         ]);
       } catch (err) {
+        console.error("Error calling chatbot API:", err);
         setMessages((prev) => [
           ...prev,
-          { sender: "bot", text: "Backend error. Try again.", timestamp },
+          { 
+            sender: "bot", 
+            text: "Sorry, I'm having trouble connecting. Please try again.", 
+            timestamp 
+          },
         ]);
       }
 

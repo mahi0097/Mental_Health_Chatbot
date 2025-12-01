@@ -7,6 +7,9 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js"
 // import chatRoutes from "./routes/chatRoutes.js"; // we'll add later
+import fileUpload from "express-fileupload";
+import voiceRoute from "./routes/voiceRoute.js";
+
 
 dotenv.config();
 
@@ -21,7 +24,21 @@ app.use(cors());
 
 // Routes
 app.use("/api/auth", authRoutes);
- app.use("/api/chat", chatRoutes); // later when chatbot is added
+app.use("/api/chat", chatRoutes);
+app.use(fileUpload());
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.use("/api", voiceRoute); 
+
+
+mongoose.connect(process.env.MONGODB_URI)
+.then(()=>{
+    console.log("MongoDB Connected");
+    app.listen(process.env.PORT,()=>{
+        console.log(`server running on port ${process.env.PORT}`);
+
+    });
+})
+.catch((err) => console.log(err)
+);
+
+

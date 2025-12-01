@@ -1,48 +1,114 @@
-// MessageInput.jsx
-import React, { useState } from "react";
-import { SendIcon } from "../common/SendIcon";
+import React, { useState, useRef } from "react";
 import MicIcon from "../common/MicIcon";
-import "./mic.css";
 
 const MessageInput = ({ onSend }) => {
-  const [input, setInput] = useState("");
+  const [message, setMessage] = useState("");
+  const [isListening, setIsListening] = useState(false);
 
-  const handleSend = (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
- 
-    console.log("Sending message:", input);
-    onSend?.(input);
-    setInput("");
+  const recognitionRef = useRef(null);
+
+  // Initialize Web Speech API
+  const initRecognition = () => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Your browser does not support voice recognition.");
+      return null;
+    }
+
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "hi-IN";  // Hindi
+    // recognition.lang = "en-US";  // If you want English
+
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    // When voice → text completes
+    recognition.onresult = (event) => {
+      const text = event.results[0][0].transcript;
+      console.log("Voice text:", text);
+
+      setMessage(text); // Auto-fill input box
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    return recognition;
+  };
+
+  // START recording on mouse down
+  const handleMicDown = () => {
+    if (isListening) return;
+
+    let recognition = recognitionRef.current;
+
+    if (!recognition) {
+      recognition = initRecognition();
+      recognitionRef.current = recognition;
+    }
+
+    if (!recognition) return;
+
+    setIsListening(true);
+    recognition.start();
+  };
+
+  // STOP recording on mouse up
+  const handleMicUp = () => {
+    const recognition = recognitionRef.current;
+
+    if (recognition && isListening) {
+      recognition.stop();
+    }
+  };
+
+  // Send message
+  const handleSend = () => {
+    if (!message.trim()) return;
+
+    onSend(message);
+    setMessage("");
   };
 
   return (
-    <footer className="bg-white px-4 py-3 border-t border-gray-200 flex-shrink-0">
-      <form onSubmit={handleSend} className="flex items-center justify-center">
-        <div className="message-input-container-bg flex items-center w-full max-w-xl border rounded-full px-4 py-2 focus-within:ring-2 focus-within:ring-purple-400">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend(e)}
-            className="flex-1 bg-transparent outline-none text-gray-700 px-2"
-          />
+    <div className="flex items-center gap-3 p-4 bg-white shadow-lg">
 
-          <button type="button" className="mic-btn">
-            <MicIcon />
-          </button>
+      {/* Input box */}
+      <input
+        type="text"
+        className="flex-1 border rounded-xl p-3"
+        placeholder="Type here..."
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
 
-          <button
-            type="submit"
-            className="send-btn-bg p-2 ml-1 rounded-full text-white disabled:opacity-50"
-            disabled={!input.trim()}
-          >
-            <SendIcon />
-          </button>
-        </div>
-      </form>
-    </footer>
+      {/* Mic button */}
+      <button
+        onMouseDown={handleMicDown}
+        onMouseUp={handleMicUp}
+        className={`p-3 rounded-full ${
+          isListening ? "bg-red-500" : "bg-purple-600"
+        } text-white`}
+      >
+        <MicIcon />
+      </button>
+
+      {/* Send button */}
+      <button
+        className="p-3 bg-pink-500 rounded-full text-white"
+        onClick={handleSend}
+      >
+        ➤
+      </button>
+    </div>
   );
 };
 
