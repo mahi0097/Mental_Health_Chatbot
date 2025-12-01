@@ -1,19 +1,16 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import mongoose from "mongoose";
+import fileUpload from "express-fileupload";
 
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
-import chatRoutes from "./routes/chatRoutes.js"
-// import chatRoutes from "./routes/chatRoutes.js"; // we'll add later
-import fileUpload from "express-fileupload";
+import chatRoutes from "./routes/chatRoutes.js";
 import voiceRoute from "./routes/voiceRoute.js";
-
 
 dotenv.config();
 
-// Connect Database
+// Connect to MongoDB (ONLY once)
 connectDB();
 
 const app = express();
@@ -21,24 +18,16 @@ const app = express();
 // Middlewares
 app.use(express.json());
 app.use(cors());
+app.use(fileUpload());
 
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
-app.use(fileUpload());
+app.use("/api", voiceRoute);
 
-app.use("/api", voiceRoute); 
+// Start Server
+const PORT = process.env.PORT || 5000;
 
-
-mongoose.connect(process.env.MONGODB_URI)
-.then(()=>{
-    console.log("MongoDB Connected");
-    app.listen(process.env.PORT,()=>{
-        console.log(`server running on port ${process.env.PORT}`);
-
-    });
-})
-.catch((err) => console.log(err)
-);
-
-
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
