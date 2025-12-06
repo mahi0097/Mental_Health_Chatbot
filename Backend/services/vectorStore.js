@@ -6,11 +6,9 @@ const pc = new Pinecone({
   apiKey: process.env.PINECONE_API_KEY,
 });
 
-const index = pc.index(process.env.PINECONE_INDEX_NAME); // e.g. "mental-wellness"
+const index = pc.index(process.env.PINECONE_INDEX_NAME); 
 
-/**
- * Save a new embedding into Pinecone
- */
+
 export const saveEmbedding = async (text, embedding, id = Date.now().toString()) => {
   try {
     await index.upsert([
@@ -27,9 +25,6 @@ export const saveEmbedding = async (text, embedding, id = Date.now().toString())
   }
 };
 
-/**
- * Search top K similar embeddings
- */
 export const searchEmbedding = async (queryEmbedding, topK = 3) => {
   try {
     const results = await index.query({

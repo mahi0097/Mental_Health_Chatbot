@@ -1,12 +1,8 @@
-// axiosClient.js
-import axios from 'axios';
+import axios from "axios";
 
-const axiosClient = axios.create({
-  baseURL: 'https://mental-health-chatbot-rk3p.onrender.com', 
-  timeout: 30000,
+export const axiosClient = axios.create({
+  baseURL: "http://localhost:5000/api",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
-
-export { axiosClient };

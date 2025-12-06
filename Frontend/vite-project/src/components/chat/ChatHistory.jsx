@@ -4,7 +4,7 @@ import { ChatBubble } from "./ChatBubble";
 const ChatHistory = ({ messages, loading }) => {
   const chatEndRef = useRef(null);
 
-  // Auto scroll to bottom when messages update
+ 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -23,7 +23,7 @@ const ChatHistory = ({ messages, loading }) => {
         <ChatBubble key={index} message={msg} />
       ))}
 
-      {/* Loading indicator */}
+      
       {loading && (
         <div className="flex justify-start">
           <div className="max-w-md w-fit p-3 rounded-2xl shadow-md chat-bubble-bot text-gray-800 self-start rounded-bl-none">

@@ -25,6 +25,7 @@ const CreateAccountCard = ({ onSwitchToLogin, onAuthSuccess }) => {
 
     try {
       const response = await register({ fullName, email, password });
+      
 
       console.log("Account created:", response.data.message);
 

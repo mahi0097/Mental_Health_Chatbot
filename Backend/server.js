@@ -10,14 +10,22 @@ import voiceRoute from "./routes/voiceRoute.js";
 
 dotenv.config();
 
-// Connect to MongoDB (ONLY once)
+// Connect Database
 connectDB();
 
 const app = express();
 
-// Middlewares
+// CORS FIX (REQUIRED FOR RENDER)
+app.use(
+  cors({
+    origin: "*", // Allow ALL clients
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+// Middleware
 app.use(express.json());
-app.use(cors());
 app.use(fileUpload());
 
 // Routes
@@ -25,9 +33,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api", voiceRoute);
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Default route
+app.get("/", (req, res) => {
+  res.send("Backend is running...");
 });
+
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
