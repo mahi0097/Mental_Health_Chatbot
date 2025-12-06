@@ -12,6 +12,7 @@ dotenv.config();
 
 // Connect Database
 connectDB();
+console.log("MONGODB_URI =", process.env.MONGODB_URI);
 
 const app = express();
 
