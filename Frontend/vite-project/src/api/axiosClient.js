@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosClient = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://mental-health-chatbot-rk3p.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
